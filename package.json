@@ -1,0 +1,29 @@
+{
+  "name": "simplelogger-backend",
+  "version": "1.0.0",
+  "description": "Simple Logger Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sidd-92/simpleloggerbackend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sidd-92/simpleloggerbackend/issues"
+  },
+  "homepage": "https://github.com/sidd-92/simpleloggerbackend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.6.10",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
