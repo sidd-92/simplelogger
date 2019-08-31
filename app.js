@@ -2,8 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logRoutes = require("./api/routes/log");
 const morgan = require("morgan");
+var cors = require("cors");
 const app = express();
-//
+//app.use(cors());
 const mongoose = require("mongoose");
 mongoose.connect(
   `mongodb+srv://sid:${process.env.MONGO_ATLAS_PWD}@logger-h8pc1.mongodb.net/test?retryWrites=true&w=majority`,
@@ -20,6 +21,7 @@ mongoose.connect(
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Header", "*");
