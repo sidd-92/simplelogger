@@ -73,7 +73,8 @@ class App extends React.Component {
             r: log.totalResident,
             g: log.totalGuest,
             hd: log.totalHD
-          }
+          },
+          _id: log._id
         };
         newLogArray.push(newLog);
         return newLogArray;
@@ -208,6 +209,13 @@ class App extends React.Component {
   deleteMode = value => {
     this.setState({ deleteMode: value });
     console.log("Delete Mode", value);
+  };
+  deleteLog = value => {
+    axios.delete(`/api/logs/${value._id}`).then(res => {
+      console.log(res);
+      console.log(res.data);
+      this.getAllLogs();
+    });
   };
   render() {
     const {
@@ -437,6 +445,7 @@ class App extends React.Component {
                 deleteMode={this.state.deleteMode}
                 key={i}
                 log={log}
+                deleteLog={this.deleteLog}
               />
             ))}
         </TabPanel>

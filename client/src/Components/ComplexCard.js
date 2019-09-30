@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ComplexGrid({ log, deleteMode }) {
+export default function ComplexGrid({ log, deleteMode, deleteLog }) {
   const classes = useStyles();
 
   return (
@@ -50,7 +50,11 @@ export default function ComplexGrid({ log, deleteMode }) {
           </Grid>
           {deleteMode && (
             <Grid item xs>
-              <Button className={classes.deleteButton} color="secondary">
+              <Button
+                onClick={() => deleteLog(log)}
+                className={classes.deleteButton}
+                color="secondary"
+              >
                 Delete
               </Button>
             </Grid>
