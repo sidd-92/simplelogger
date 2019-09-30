@@ -32,6 +32,7 @@ POST Object Notation
 //GET LOGS
 router.get("/", (req, res, next) => {
   Log.find()
+    .sort({ date: -1 })
     .select("-_v")
     .exec()
     .then(result => {
@@ -58,7 +59,8 @@ router.post("/filterbydate", (req, res, next) => {
   let { startDate, endDate } = req.body;
   Log.find({
     date: { $gte: startDate, $lte: endDate }
-  }).sort({date: -1})
+  })
+    .sort({ date: -1 })
     .select("-_v")
     .exec()
     .then(result => {

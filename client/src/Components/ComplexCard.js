@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-//import Button from "@material-ui/core/Button";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,31 +14,12 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2),
     maxWidth: 500
   },
-  image: {
-    width: 128,
-    height: 128
-  },
-  img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%"
+  deleteButton: {
+    float: "right"
   }
 }));
 
-/*
-log = {
-      date: Moment(this.state.selectedDate).format("Do MMM"),
-      mealType: this.state.selectValue.mealType,
-      mealOption: this.state.mealOption,
-      category: {
-        r: this.state.totalResident > 0 ? this.state.totalResident : 0,
-        g: this.state.totalGuest > 0 ? this.state.totalGuest : 0,
-        hd: this.state.totalHomeDelivery > 0 ? this.state.totalHomeDelivery : 0
-      }
-    }
-*/
-export default function ComplexGrid({ log }) {
+export default function ComplexGrid({ log, deleteMode }) {
   const classes = useStyles();
 
   return (
@@ -67,6 +48,13 @@ export default function ComplexGrid({ log }) {
               <Typography variant="subtitle1">{log.date}</Typography>
             </Grid>
           </Grid>
+          {deleteMode && (
+            <Grid item xs>
+              <Button className={classes.deleteButton} color="secondary">
+                Delete
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </Paper>
     </div>

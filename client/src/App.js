@@ -11,6 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import TabPanel from "./Components/TabPanel";
+import SimpleMenu from "./Components/SimpleMenu";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -47,8 +48,10 @@ class App extends React.Component {
       openSnackBar: false,
       addedLogs: [],
       errorMessage: "",
+      isFilterOn: false,
       endDate: Moment(new Date()).format("YYYY-MM-DD"),
-      startDate: Moment(new Date()).format("YYYY-MM-DD")
+      startDate: Moment(new Date()).format("YYYY-MM-DD"),
+      deleteMode: false
     };
   }
   componentDidMount() {
@@ -76,7 +79,8 @@ class App extends React.Component {
         return newLogArray;
       });
       this.setState({
-        addedLogs: [...this.state.addedLogs, ...newLogArray]
+        addedLogs: newLogArray,
+        isFilterOn: false
       });
     });
   };
@@ -185,7 +189,7 @@ class App extends React.Component {
           };
           tempArray.push(obj);
         });
-        this.setState({ addedLogs: tempArray });
+        this.setState({ addedLogs: tempArray, isFilterOn: true });
       }
       console.log(res.data);
     });
@@ -201,13 +205,18 @@ class App extends React.Component {
     // console.log("START DATE", Moment(startDate).format("DD-MM-YYYY"));
     this.setState({ startDate: Moment(startDate).format("YYYY-MM-DD") });
   };
+  deleteMode = value => {
+    this.setState({ deleteMode: value });
+    console.log("Delete Mode", value);
+  };
   render() {
     const {
       tabValue,
       selectedDate,
       mealOption,
       selectValue,
-      openSnackBar
+      openSnackBar,
+      isFilterOn
     } = this.state;
     return (
       <React.Fragment>
@@ -221,6 +230,12 @@ class App extends React.Component {
               handleStartDateChange={this.getStartDate}
               filterByDate={this.filterByDate}
             />
+            <SimpleMenu deleteMode={this.deleteMode} />
+            {isFilterOn && (
+              <Button color="inherit" onClick={this.clearFilter}>
+                Clear
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
         <Snackbar
@@ -418,7 +433,11 @@ class App extends React.Component {
         <TabPanel value={tabValue} index={1}>
           {this.state.addedLogs.length > 0 &&
             this.state.addedLogs.map((log, i) => (
-              <ComplexGrid key={i} log={log} />
+              <ComplexGrid
+                deleteMode={this.state.deleteMode}
+                key={i}
+                log={log}
+              />
             ))}
         </TabPanel>
         <TabPanel value={tabValue} index={2}>
