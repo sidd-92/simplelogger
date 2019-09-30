@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const logRoutes = require("./routes/api/log");
 const morgan = require("morgan");
 const app = express();
-//app.use(cors());
+app.use(cors());
 const mongoose = require("mongoose");
 mongoose.connect(
   `mongodb+srv://sid:${process.env.MONGO_ATLAS_PWD}@logger-h8pc1.mongodb.net/test?retryWrites=true&w=majority`,
