@@ -44,6 +44,9 @@ export default function FullScreenDialog(props) {
 
   function handleClose() {
     setOpen(false);
+  }
+  function handleDateFilter() {
+    setOpen(false);
     props.filterByDate();
   }
   return (
@@ -73,7 +76,7 @@ export default function FullScreenDialog(props) {
             <Typography variant="h6" className={classes.title}>
               Filter By Date
             </Typography>
-            <Button color="inherit" onClick={handleClose}>
+            <Button color="inherit" onClick={handleDateFilter}>
               Apply
             </Button>
           </Toolbar>
@@ -103,6 +106,7 @@ export default function FullScreenDialog(props) {
                 fullWidth
                 id="mui-pickers-date"
                 label="End Date"
+                minDate={startDate}
                 value={endDate}
                 onChange={date => setEndDate(date)}
                 onAccept={date => props.handleEndDateChange(date)}

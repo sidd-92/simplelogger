@@ -167,9 +167,31 @@ class App extends React.Component {
       endDate: this.state.endDate
     };
     axios.post(`/api/logs/filterbydate`, dateObj).then(res => {
-      console.log(res);
+      let count = res.data.count;
+      if (count > 0) {
+        let logs = res.data.logs;
+        let tempArray = [];
+        logs.map(log => {
+          let obj = {
+            date: Moment(log.dateLogged).format("Do MMM YY"),
+            mealType: log.mealType,
+            mealOption: log.isBeverage ? "Beverage" : "Food",
+            category: {
+              r: log.totalResident,
+              g: log.totalGuest,
+              hd: log.totalHD
+            },
+            _id: log._id
+          };
+          tempArray.push(obj);
+        });
+        this.setState({ addedLogs: tempArray });
+      }
       console.log(res.data);
     });
+  };
+  clearFilter = () => {
+    this.getAllLogs();
   };
   getEndDate = endDate => {
     // console.log("END DATE", Moment(endDate).format("DD-MM-YYYY"));

@@ -58,7 +58,7 @@ router.post("/filterbydate", (req, res, next) => {
   let { startDate, endDate } = req.body;
   Log.find({
     date: { $gte: startDate, $lte: endDate }
-  })
+  }).sort({date: -1})
     .select("-_v")
     .exec()
     .then(result => {
