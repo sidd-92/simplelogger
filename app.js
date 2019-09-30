@@ -22,6 +22,14 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use("/api/logs", logRoutes);
+//Serve Static Assets in Production
+if (process.env.NODE_ENV === "production") {
+  //Set a Static Folder
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 //! If the Routes comes past the above middleware
 //! Then there is an Error, So all Error must be handled after the accepted routes
