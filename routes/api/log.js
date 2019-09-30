@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Log = require("../models/log");
+const Log = require("../../models/log");
 const moment = require("moment");
 
 /*

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
 const logSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   date: {

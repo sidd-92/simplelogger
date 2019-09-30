@@ -1,0 +1,33 @@
+/*#91eae4, #86a8e7, #7f7fd5 */
+.addPaper {
+  padding: 10px;
+  margin: 5px 0px;
+}
+.selectPaper {
+  padding: 9px;
+  margin: 5px 0px;
+}
+.gridText {
+  padding: 9px;
+  margin: 0 auto;
+}
+.gridPaper {
+  padding-left: 5px;
+  padding-top: 5px;
+  margin-bottom: 15px;
+}
+
+.detailsHeader {
+  color: white;
+  font-size: 1.3rem;
+}
+.addButton {
+  width: 100%;
+  background-color: #1c3aa1 !important;
+}
+.textField {
+  margin: 0px;
+}
+.badgeCount {
+  padding: 0px 10px;
+}
