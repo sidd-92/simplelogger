@@ -4,7 +4,7 @@ const logSchema = mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date()
+    default: Date.now
   },
   mealType: { type: String, required: true, default: "None" },
   isBeverage: { type: Boolean, default: false },

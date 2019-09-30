@@ -55,7 +55,7 @@ router.get("/", (req, res, next) => {
 });
 //Get Data between Dates
 router.get("/filterbydate", (req, res, next) => {
-  let { startDate, endDate } = req.query;
+  let { startDate, endDate } = req.body;
   Log.find({
     date: { $lte: endDate, $gte: startDate }
   })
@@ -130,7 +130,7 @@ router.post("/", (req, res, next) => {
 });
 router.delete("/:logID", (req, res, next) => {
   const id = req.params.logID;
-  Log.deleteOne({ _id: id })
+  Log.findByIdAndRemove({ _id: id })
     .exec()
     .then(result => {
       res.status(200).json({

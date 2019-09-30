@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 mongoose.connect(
   `mongodb+srv://sid:${process.env.MONGO_ATLAS_PWD}@logger-h8pc1.mongodb.net/test?retryWrites=true&w=majority`,
   {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: false
   },
   function(err, client) {
     if (err) {
