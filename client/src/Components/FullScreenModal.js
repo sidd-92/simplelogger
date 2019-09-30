@@ -33,18 +33,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog() {
+export default function FullScreenDialog(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  const [startDate, setStartDate] = React.useState(new Date());
+  const [endDate, setEndDate] = React.useState(new Date());
   function handleClickOpen() {
     setOpen(true);
   }
 
   function handleClose() {
     setOpen(false);
+    props.filterByDate();
   }
-
   return (
     <div>
       <IconButton onClick={handleClickOpen}>
@@ -81,14 +82,13 @@ export default function FullScreenDialog() {
           <ListItem>
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <KeyboardDatePicker
-                disableFuture={true}
                 margin="normal"
                 fullWidth
                 id="mui-pickers-date"
                 label="Start Date"
-                value={new Date()}
-                onChange={date => this.handleDateChange(date)}
-                onAccept={date => this.handleDateChange(date)}
+                value={startDate}
+                onChange={date => setStartDate(date)}
+                onAccept={date => props.handleStartDateChange(date)}
                 KeyboardButtonProps={{
                   "aria-label": "change date"
                 }}
@@ -99,14 +99,13 @@ export default function FullScreenDialog() {
           <ListItem>
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <KeyboardDatePicker
-                disableFuture={true}
                 margin="normal"
                 fullWidth
                 id="mui-pickers-date"
                 label="End Date"
-                value={new Date()}
-                onChange={date => this.handleDateChange(date)}
-                onAccept={date => this.handleDateChange(date)}
+                value={endDate}
+                onChange={date => setEndDate(date)}
+                onAccept={date => props.handleEndDateChange(date)}
                 KeyboardButtonProps={{
                   "aria-label": "change date"
                 }}

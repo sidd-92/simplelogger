@@ -54,10 +54,10 @@ router.get("/", (req, res, next) => {
     .catch(err => console.log(err));
 });
 //Get Data between Dates
-router.get("/filterbydate", (req, res, next) => {
+router.post("/filterbydate", (req, res, next) => {
   let { startDate, endDate } = req.body;
   Log.find({
-    date: { $lte: endDate, $gte: startDate }
+    date: { $gte: startDate, $lte: endDate }
   })
     .select("-_v")
     .exec()

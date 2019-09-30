@@ -46,7 +46,9 @@ class App extends React.Component {
       totalHomeDelivery: "",
       openSnackBar: false,
       addedLogs: [],
-      errorMessage: ""
+      errorMessage: "",
+      endDate: Moment(new Date()).format("YYYY-MM-DD"),
+      startDate: Moment(new Date()).format("YYYY-MM-DD")
     };
   }
   componentDidMount() {
@@ -158,6 +160,25 @@ class App extends React.Component {
       errorMessage: ""
     });
   };
+
+  filterByDate = () => {
+    let dateObj = {
+      startDate: this.state.startDate,
+      endDate: this.state.endDate
+    };
+    axios.post(`/api/logs/filterbydate`, dateObj).then(res => {
+      console.log(res);
+      console.log(res.data);
+    });
+  };
+  getEndDate = endDate => {
+    // console.log("END DATE", Moment(endDate).format("DD-MM-YYYY"));
+    this.setState({ endDate: Moment(endDate).format("YYYY-MM-DD") });
+  };
+  getStartDate = startDate => {
+    // console.log("START DATE", Moment(startDate).format("DD-MM-YYYY"));
+    this.setState({ startDate: Moment(startDate).format("YYYY-MM-DD") });
+  };
   render() {
     const {
       tabValue,
@@ -173,7 +194,11 @@ class App extends React.Component {
             <Typography variant="h6" color="inherit" style={{ flexGrow: 1 }}>
               Food Logger
             </Typography>
-            <FullScreenDialog />
+            <FullScreenDialog
+              handleEndDateChange={this.getEndDate}
+              handleStartDateChange={this.getStartDate}
+              filterByDate={this.filterByDate}
+            />
           </Toolbar>
         </AppBar>
         <Snackbar
@@ -182,7 +207,7 @@ class App extends React.Component {
             horizontal: "left"
           }}
           open={openSnackBar}
-          autoHideDuration={1000}
+          autoHideDuration={2000}
           onClose={() => this.setState({ openSnackBar: false })}
           ContentProps={{
             "aria-describedby": "message-id"
