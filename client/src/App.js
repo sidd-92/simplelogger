@@ -45,30 +45,15 @@ class App extends React.Component {
       totalGuest: "",
       totalHomeDelivery: "",
       openSnackBar: false,
-      addedLogs: []
+      addedLogs: [],
+      errorMessage: ""
     };
   }
   componentDidMount() {
-    /*
-    let log = {
-      date: Moment(this.state.selectedDate).format("Do MMM YY"),
-      mealType: this.state.selectValue.mealType,
-      mealOption: this.state.mealOption,
-      category: {
-        r: this.state.totalResident > 0 ? this.state.totalResident : 0,
-        g: this.state.totalGuest > 0 ? this.state.totalGuest : 0,
-        hd: this.state.totalHomeDelivery > 0 ? this.state.totalHomeDelivery : 0
-      }
-    };
-    */
-    /*
-    dateLogged: "2019-07-08T00:00:00.000Z"
-    isBeverage: true
-    mealType: "None"
-    totalGuest: 0
-    totalHD: 2
-    totalResident: 0
-     */
+    this.getAllLogs();
+  }
+
+  getAllLogs = () => {
     axios.get(`/api/logs`).then(res => {
       const { count, logs } = res.data;
       console.log("Logs", ...logs);
@@ -92,7 +77,7 @@ class App extends React.Component {
         addedLogs: [...this.state.addedLogs, ...newLogArray]
       });
     });
-  }
+  };
   handleTabChange = (e, v) => {
     this.setState({ tabValue: v });
   };
@@ -118,26 +103,49 @@ class App extends React.Component {
     this.setState({ totalHomeDelivery: e.target.value });
   };
   addLog = e => {
-    let log = {
-      date: Moment(this.state.selectedDate).format("Do MMM YY"),
-      mealType: this.state.selectValue.mealType,
-      mealOption: this.state.mealOption,
-      category: {
-        r: this.state.totalResident > 0 ? this.state.totalResident : 0,
-        g: this.state.totalGuest > 0 ? this.state.totalGuest : 0,
-        hd: this.state.totalHomeDelivery > 0 ? this.state.totalHomeDelivery : 0
-      }
-    };
-    let newLogs = [];
-    newLogs.push(log);
-    this.setState(
-      {
-        addedLogs: [...this.state.addedLogs, log],
-        openSnackBar: true,
-        tabValue: 1
-      },
-      this.resetFields()
-    );
+    if (
+      this.state.totalResident > 0 ||
+      this.state.totalGuest > 0 ||
+      this.state.totalHomeDelivery > 0
+    ) {
+      let log = {
+        date: Moment(this.state.selectedDate).format("Do MMM YY"),
+        mealType: this.state.selectValue.mealType,
+        mealOption: this.state.mealOption,
+        category: {
+          r: this.state.totalResident > 0 ? this.state.totalResident : 0,
+          g: this.state.totalGuest > 0 ? this.state.totalGuest : 0,
+          hd:
+            this.state.totalHomeDelivery > 0 ? this.state.totalHomeDelivery : 0
+        }
+      };
+      let dbData = {
+        isBeverage: this.state.mealOption === "Beverage",
+        totalResident: log.category.r,
+        totalGuest: log.category.g,
+        totalHD: log.category.hd,
+        mealType: log.mealType,
+        date: this.state.selectedDate
+      };
+      axios.post(`/api/logs`, dbData).then(res => {
+        console.log(res);
+        console.log(res.data);
+      });
+      let newLogs = [];
+      newLogs.push(log);
+      this.setState(
+        {
+          addedLogs: [...this.state.addedLogs, log],
+          openSnackBar: true,
+          tabValue: 1
+        },
+        this.resetFields()
+      );
+    } else {
+      this.setState({
+        errorMessage: "Please Add Number of Res/Guest/Home Delivery"
+      });
+    }
   };
   resetFields = () => {
     this.setState({
@@ -146,7 +154,8 @@ class App extends React.Component {
       mealOption: "Food",
       totalResident: "",
       totalGuest: "",
-      totalHomeDelivery: ""
+      totalHomeDelivery: "",
+      errorMessage: ""
     });
   };
   render() {
@@ -299,11 +308,12 @@ class App extends React.Component {
                 <TextField
                   required
                   value={this.state.totalResident}
+                  error={this.state.errorMessage !== ""}
                   type="number"
                   onChange={e => this.handleChangeResident(e)}
                   className="textField"
                   id="outlined-dense"
-                  label="Res"
+                  label="1"
                   margin="dense"
                   helperText="Resident"
                   variant="outlined"
@@ -313,12 +323,13 @@ class App extends React.Component {
               <Grid item xs={4}>
                 <TextField
                   required
+                  error={this.state.errorMessage !== ""}
                   value={this.state.totalGuest}
                   onChange={e => this.handleChangeGuest(e)}
                   type="number"
                   className="textField"
                   id="outlined-dense"
-                  label="Guest"
+                  label="1"
                   margin="dense"
                   helperText="Guest"
                   variant="outlined"
@@ -328,13 +339,14 @@ class App extends React.Component {
               <Grid item xs={4}>
                 <TextField
                   required
+                  error={this.state.errorMessage !== ""}
                   value={this.state.totalHomeDelivery}
                   onChange={e => this.handleChangeHomeDelivery(e)}
                   helperText="Home Delivery"
                   type="number"
                   className="textField"
                   id="outlined-dense"
-                  label="HD"
+                  label="1"
                   margin="dense"
                   variant="outlined"
                   fullWidth
@@ -350,6 +362,11 @@ class App extends React.Component {
           >
             Log Details
           </Button>
+          {this.state.errorMessage !== "" && (
+            <Typography color="error" align="center">
+              Please Enter a Value greater than 0
+            </Typography>
+          )}
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
           {this.state.addedLogs.length > 0 &&
