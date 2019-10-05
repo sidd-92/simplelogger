@@ -51,7 +51,8 @@ class App extends React.Component {
       isFilterOn: false,
       endDate: Moment(new Date()).format("YYYY-MM-DD"),
       startDate: Moment(new Date()).format("YYYY-MM-DD"),
-      deleteMode: false
+      deleteMode: false,
+      logFilteredDate: {}
     };
   }
   componentDidMount() {
@@ -61,8 +62,8 @@ class App extends React.Component {
   getAllLogs = () => {
     axios.get(`/api/logs`).then(res => {
       const { count, logs } = res.data;
-      console.log("Logs", ...logs);
-      console.log("Count", count);
+      //console.log("Logs", ...logs);
+      //console.log("Count", count);
       let newLogArray = [];
       logs.map(log => {
         let newLog = {
@@ -79,11 +80,40 @@ class App extends React.Component {
         newLogArray.push(newLog);
         return newLogArray;
       });
-      this.setState({
-        addedLogs: newLogArray,
-        isFilterOn: false
-      });
+      this.setState(
+        {
+          addedLogs: newLogArray,
+          isFilterOn: false
+        },
+        () => this.filterOutLogsByDate()
+      );
     });
+  };
+  filterOutLogsByDate = () => {
+    let logs = this.state.addedLogs;
+    let logsByDate = {};
+    let logFilteredDate = this.state.logFilteredDate;
+    logs.map(log => {
+      //console.log(log.date);
+      if (log.date in logsByDate === false) {
+        logsByDate[log.date] = true;
+      }
+      return logsByDate;
+    });
+    let dates = Object.keys(logsByDate);
+    dates.map(date => {
+      let res = this.givenDateReturnLog(date);
+      logFilteredDate[date] = res;
+    });
+    this.setState({ logFilteredDate });
+  };
+
+  givenDateReturnLog = date => {
+    let logs = this.state.addedLogs;
+    let dateObj = {};
+    let res = logs.filter(log => log.date === date);
+    return res;
+    //console.log("result", dateObj);
   };
   handleTabChange = (e, v) => {
     this.setState({ tabValue: v });
@@ -135,8 +165,8 @@ class App extends React.Component {
         date: this.state.selectedDate
       };
       axios.post(`/api/logs`, dbData).then(res => {
-        console.log(res);
-        console.log(res.data);
+        //console.log(res);
+        //console.log(res.data);
       });
       let newLogs = [];
       newLogs.push(log);
@@ -192,7 +222,7 @@ class App extends React.Component {
         });
         this.setState({ addedLogs: tempArray, isFilterOn: true });
       }
-      console.log(res.data);
+      //console.log(res.data);
     });
   };
   clearFilter = () => {
@@ -208,12 +238,12 @@ class App extends React.Component {
   };
   deleteMode = value => {
     this.setState({ deleteMode: value });
-    console.log("Delete Mode", value);
+    //console.log("Delete Mode", value);
   };
   deleteLog = value => {
     axios.delete(`/api/logs/${value._id}`).then(res => {
-      console.log(res);
-      console.log(res.data);
+      // console.log(res);
+      // console.log(res.data);
       this.getAllLogs();
     });
   };
@@ -450,7 +480,14 @@ class App extends React.Component {
             ))}
         </TabPanel>
         <TabPanel value={tabValue} index={2}>
-          <ExpansionPanels />
+          {Object.keys(this.state.logFilteredDate).length > 0 &&
+            Object.keys(this.state.logFilteredDate).map((filtered, index) => (
+              <ExpansionPanels
+                key={index}
+                date={filtered}
+                info={this.state.logFilteredDate[filtered]}
+              />
+            ))}
         </TabPanel>
       </React.Fragment>
     );
