@@ -112,8 +112,43 @@ class App extends React.Component {
     let logs = this.state.addedLogs;
     let dateObj = {};
     let res = logs.filter(log => log.date === date);
+    this.giveMealTypeBasedOnDate(res);
     return res;
     //console.log("result", dateObj);
+  };
+  giveMealTypeBasedOnDate = dateArray => {
+    let mealTypeObj = {};
+    dateArray.map(item => {
+      if (item.mealType === "Breakfast" && item.mealOption === "Food") {
+        mealTypeObj[`${item.date} Breakfast`] = {
+          category: item.category,
+          option: "Food",
+          type: "Breakfast"
+        };
+      }
+      if (item.mealType === "Lunch" && item.mealOption === "Food") {
+        mealTypeObj[`${item.date} Lunch`] = {
+          category: item.category,
+          option: "Food",
+          type: "Lunch"
+        };
+      }
+      if (item.mealType === "Dinner" && item.mealOption === "Food") {
+        mealTypeObj[`${item.date} Dinner`] = {
+          category: item.category,
+          option: "Food",
+          type: "Dinner"
+        };
+      }
+      if (item.mealType === "Snack" && item.mealOption === "Food") {
+        mealTypeObj[`${item.date} Snack`] = {
+          category: item.category,
+          option: "Food",
+          type: "Snack"
+        };
+      }
+    });
+    console.log(mealTypeObj);
   };
   handleTabChange = (e, v) => {
     this.setState({ tabValue: v });
