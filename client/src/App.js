@@ -148,6 +148,32 @@ class App extends React.Component {
           type: "Snack"
         };
       }
+      if (item.mealType === "None" && item.mealOption === "Beverage") {
+        mealTypeObj[`${item.date} Beverage`] = {
+          category: item.category
+        };
+      }
+      if (item.mealType === "Breakfast" && item.mealOption === "Beverage") {
+        mealTypeObj[`${item.date} Beverage Breakfast`] = {
+          category: item.category,
+          option: "Beverage",
+          type: "Breakfast"
+        };
+      }
+      if (item.mealType === "Lunch" && item.mealOption === "Beverage") {
+        mealTypeObj[`${item.date} Beverage Lunch`] = {
+          category: item.category,
+          option: "Beverage",
+          type: "Lunch"
+        };
+      }
+      if (item.mealType === "Dinner" && item.mealOption === "Beverage") {
+        mealTypeObj[`${item.date} Beverage Dinner`] = {
+          category: item.category,
+          option: "Beverage",
+          type: "Dinner"
+        };
+      }
     });
     this.setState({ foodMealObj: mealTypeObj });
     //console.log(mealTypeObj);

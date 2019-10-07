@@ -29,12 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SimpleExpansionPanel({ info, date }) {
   const classes = useStyles();
-  console.log(
-    "SimpleExpansionPanel",
-    date,
-    info[`${date} Breakfast`]["category"].hd,
-    info
-  );
+  console.log("SimpleExpansionPanel", info[`${date} Beverage`]["category"]);
   return (
     <div className={classes.root}>
       <ExpansionPanel>
@@ -47,9 +42,9 @@ export default function SimpleExpansionPanel({ info, date }) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Paper className={classes.paperGrid}>
-            <Grid container spacing={3}>
-              <Grid item xs={4}></Grid>
-              <Grid item xs={4}>
+            <Grid container spacing={4}>
+              <Grid item xs={3}></Grid>
+              <Grid item xs={3}>
                 <Typography variant="subtitle2">Food</Typography> <br />
                 <Grid container>
                   <Grid item xs={4}>
@@ -63,7 +58,7 @@ export default function SimpleExpansionPanel({ info, date }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <Typography variant="subtitle2">Beverage</Typography> <br />
                 <Grid container>
                   <Grid item xs={4}>
@@ -77,14 +72,28 @@ export default function SimpleExpansionPanel({ info, date }) {
                   </Grid>
                 </Grid>
               </Grid>
+              <Grid item xs={3}>
+                <Typography variant="subtitle2">None</Typography> <br />
+                <Grid container alignItems="center" justify="center">
+                  <Grid item xs={4}>
+                    R
+                  </Grid>
+                  <Grid item xs={4}>
+                    G
+                  </Grid>
+                  <Grid item xs={4}>
+                    HD
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid container spacing={3}>
-              <Grid direction="column" item xs={4}>
-                <Grid>Breakfast</Grid>
+              <Grid container direction="column" item xs={3}>
+                <Grid>Break/F</Grid>
                 <Grid>Lunch</Grid>
                 <Grid>Dinner</Grid>
               </Grid>
-              <Grid direction="column" item xs={4}>
+              <Grid container direction="column" item xs={3}>
                 <Grid container>
                   <Grid item xs={4}>
                     {info[`${date} Breakfast`]["category"].r}
@@ -119,38 +128,98 @@ export default function SimpleExpansionPanel({ info, date }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid direction="column" item xs={4}>
+              <Grid container direction="column" item xs={3}>
                 <Grid container>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Breakfast`] &&
+                      info[`${date} Beverage Breakfast`]["category"].r) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Breakfast`] &&
+                      info[`${date} Beverage Breakfast`]["category"].g) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Breakfast`] &&
+                      info[`${date} Beverage Breakfast`]["category"].hd) ||
+                      "-"}
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Lunch`] &&
+                      info[`${date} Beverage Lunch`]["category"].r) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Lunch`] &&
+                      info[`${date} Beverage Lunch`]["category"].g) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Lunch`] &&
+                      info[`${date} Beverage Lunch`]["category"].hd) ||
+                      "-"}
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Dinner`] &&
+                      info[`${date} Beverage Dinner`]["category"].r) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Dinner`] &&
+                      info[`${date} Beverage Dinner`]["category"].g) ||
+                      "-"}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {(info[`${date} Beverage Dinner`] &&
+                      info[`${date} Beverage Dinner`]["category"].hd) ||
+                      "-"}
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                alignItems="center"
+                justify="center"
+                direction="column"
+                item
+                xs={3}
+              >
+                <Grid container alignItems="center" justify="center">
+                  <Grid item xs={4}>
+                    {info[`${date} Beverage`]["category"].r}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {info[`${date} Beverage`]["category"].g}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {info[`${date} Beverage`]["category"].hd}
+                  </Grid>
+                </Grid>
+                <Grid container alignItems="center" justify="center">
+                  <Grid item xs={4}>
+                    --
+                  </Grid>
+                  <Grid item xs={4}>
+                    --
+                  </Grid>
+                  <Grid item xs={4}>
+                    --
+                  </Grid>
+                </Grid>
+                <Grid container alignItems="center" justify="center">
+                  <Grid item xs={4}>
+                    --
+                  </Grid>
+                  <Grid item xs={4}>
+                    --
+                  </Grid>
+                  <Grid item xs={4}>
+                    --
                   </Grid>
                 </Grid>
               </Grid>
