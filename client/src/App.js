@@ -45,6 +45,7 @@ class App extends React.Component {
       totalResident: "",
       totalGuest: "",
       totalHomeDelivery: "",
+      foodMealObj: {},
       openSnackBar: false,
       addedLogs: [],
       errorMessage: "",
@@ -105,6 +106,7 @@ class App extends React.Component {
       let res = this.givenDateReturnLog(date);
       logFilteredDate[date] = res;
     });
+    this.giveMealTypeBasedOnDate(this.state.addedLogs);
     this.setState({ logFilteredDate });
   };
 
@@ -112,7 +114,6 @@ class App extends React.Component {
     let logs = this.state.addedLogs;
     let dateObj = {};
     let res = logs.filter(log => log.date === date);
-    this.giveMealTypeBasedOnDate(res);
     return res;
     //console.log("result", dateObj);
   };
@@ -148,7 +149,8 @@ class App extends React.Component {
         };
       }
     });
-    console.log(mealTypeObj);
+    this.setState({ foodMealObj: mealTypeObj });
+    //console.log(mealTypeObj);
   };
   handleTabChange = (e, v) => {
     this.setState({ tabValue: v });
@@ -520,7 +522,7 @@ class App extends React.Component {
               <ExpansionPanels
                 key={index}
                 date={filtered}
-                info={this.state.logFilteredDate[filtered]}
+                info={this.state.foodMealObj}
               />
             ))}
         </TabPanel>

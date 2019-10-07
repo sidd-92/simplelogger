@@ -29,7 +29,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function SimpleExpansionPanel({ info, date }) {
   const classes = useStyles();
-  console.log("Values", info);
+  console.log(
+    "SimpleExpansionPanel",
+    date,
+    info[`${date} Breakfast`]["category"].hd,
+    info
+  );
   return (
     <div className={classes.root}>
       <ExpansionPanel>
@@ -82,70 +87,70 @@ export default function SimpleExpansionPanel({ info, date }) {
               <Grid direction="column" item xs={4}>
                 <Grid container>
                   <Grid item xs={4}>
-                    1
+                    {info[`${date} Breakfast`]["category"].r}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {info[`${date} Breakfast`]["category"].g}
                   </Grid>
                   <Grid item xs={4}>
-                    2
-                  </Grid>
-                </Grid>
-                <Grid container>
-                  <Grid item xs={4}>
-                    1
-                  </Grid>
-                  <Grid item xs={4}>
-                    0
-                  </Grid>
-                  <Grid item xs={4}>
-                    2
+                    {info[`${date} Breakfast`]["category"].hd}
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={4}>
-                    1
+                    {info[`${date} Lunch`]["category"].r}
                   </Grid>
                   <Grid item xs={4}>
-                    0
+                    {info[`${date} Lunch`]["category"].g}
                   </Grid>
                   <Grid item xs={4}>
-                    2
+                    {info[`${date} Lunch`]["category"].hd}
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={4}>
+                    {info[`${date} Dinner`]["category"].r}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {info[`${date} Dinner`]["category"].g}
+                  </Grid>
+                  <Grid item xs={4}>
+                    {info[`${date} Lunch`]["category"].hd}
                   </Grid>
                 </Grid>
               </Grid>
               <Grid direction="column" item xs={4}>
                 <Grid container>
                   <Grid item xs={4}>
-                    1
+                    0
                   </Grid>
                   <Grid item xs={4}>
                     0
                   </Grid>
                   <Grid item xs={4}>
-                    2
+                    0
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={4}>
-                    1
+                    0
                   </Grid>
                   <Grid item xs={4}>
                     0
                   </Grid>
                   <Grid item xs={4}>
-                    2
+                    0
                   </Grid>
                 </Grid>
                 <Grid container>
                   <Grid item xs={4}>
-                    1
+                    0
                   </Grid>
                   <Grid item xs={4}>
                     0
                   </Grid>
                   <Grid item xs={4}>
-                    2
+                    0
                   </Grid>
                 </Grid>
               </Grid>
