@@ -7,6 +7,47 @@
   padding: 9px;
   margin: 5px 0px;
 }
+.centerDiv {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  justify-items: center;
+  background-color: #eee;
+}
+.paperPadding {
+  padding: 10px;
+}
+.gridSummary {
+  width: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+}
+.typoGridClass {
+  width: 100%;
+  background-color: #ccc;
+  text-align: center;
+}
+.gridSummary div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  align-content: center;
+}
+.typoBg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 5px;
+  background-color: #ccc;
+  border-radius: 3px;
+  text-align: center;
+}
 .gridText {
   padding: 9px;
   margin: 0 auto;

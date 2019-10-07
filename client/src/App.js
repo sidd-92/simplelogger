@@ -29,6 +29,7 @@ import ExpansionPanels from "./Components/ExpansionPanels";
 import Moment from "moment";
 import MomentUtils from "@date-io/moment";
 import axios from "axios";
+import min from "lodash/min";
 import FullScreenDialog from "./Components/FullScreenModal";
 import {
   MuiPickersUtilsProvider,
@@ -53,7 +54,17 @@ class App extends React.Component {
       endDate: Moment(new Date()).format("YYYY-MM-DD"),
       startDate: Moment(new Date()).format("YYYY-MM-DD"),
       deleteMode: false,
-      logFilteredDate: {}
+      logFilteredDate: {},
+      totalResidentsTillDate: 0,
+      totalGuestsTillDate: 0,
+      totalHomeDeliveryTillDate: 0,
+      totalResidentsTillDate_Beverage: 0,
+      totalGuestsTillDate_Beverage: 0,
+      totalHomeDeliveryTillDate_Beverage: 0,
+      totalHomeDeliveryTillDate_Beverage_None: 0,
+      max_date: "",
+      min_date: "",
+      totalSum: 0
     };
   }
   componentDidMount() {
@@ -86,7 +97,10 @@ class App extends React.Component {
           addedLogs: newLogArray,
           isFilterOn: false
         },
-        () => this.filterOutLogsByDate()
+        () => {
+          this.filterOutLogsByDate();
+          this.computeTotalCategory();
+        }
       );
     });
   };
@@ -107,12 +121,19 @@ class App extends React.Component {
       logFilteredDate[date] = res;
     });
     this.giveMealTypeBasedOnDate(this.state.addedLogs);
-    this.setState({ logFilteredDate });
+    let len = Object.keys(logFilteredDate).length;
+    //console.log("MIn Date", min(Object.keys(logFilteredDate)));
+    let max_date = Object.keys(logFilteredDate).sort((d1, d2) => {
+      return d2 - d1;
+    })[0];
+    let min_date = Object.keys(logFilteredDate).sort((d1, d2) => {
+      return d1 - d2;
+    })[len - 1];
+    this.setState({ logFilteredDate, min_date, max_date });
   };
 
   givenDateReturnLog = date => {
     let logs = this.state.addedLogs;
-    let dateObj = {};
     let res = logs.filter(log => log.date === date);
     return res;
     //console.log("result", dateObj);
@@ -177,6 +198,64 @@ class App extends React.Component {
     });
     this.setState({ foodMealObj: mealTypeObj });
     //console.log(mealTypeObj);
+  };
+  computeTotalCategory = () => {
+    let allLogs = this.state.addedLogs;
+    let initR = this.state.totalResidentsTillDate;
+    let initG = this.state.totalGuestsTillDate;
+    let initHD = this.state.totalHomeDeliveryTillDate;
+    let initR_B = this.state.totalResidentsTillDate_Beverage;
+    let initG_B = this.state.totalGuestsTillDate_Beverage;
+    let initHD_B = this.state.totalHomeDeliveryTillDate_Beverage;
+    let initHD_B_None = this.state.totalHomeDeliveryTillDate_Beverage_None;
+    allLogs.map(log => {
+      if (log.mealOption === "Food") {
+        if (
+          log.mealType === "Breakfast" ||
+          log.mealType === "Lunch" ||
+          log.mealType === "Dinner"
+        ) {
+          initR = log.category.r + initR;
+          initG = log.category.g + initG;
+          initHD = log.category.hd + initHD;
+        }
+      }
+      if (log.mealOption === "Beverage") {
+        if (log.mealType !== "None") {
+          initR_B = log.category.r + initR;
+          initG_B = log.category.g + initG;
+          initHD_B = log.category.hd + initHD_B;
+        }
+        initHD_B_None = log.category.hd + initHD_B_None;
+      }
+    });
+    //console.log("totalHomeDeliveryTillDate = ", initHD);
+    this.setState(
+      {
+        totalResidentsTillDate: initR,
+        totalGuestsTillDate: initG,
+        totalHomeDeliveryTillDate: initHD,
+        totalResidentsTillDate_Beverage: initR_B,
+        totalGuestsTillDate_Beverage: initG_B,
+        totalHomeDeliveryTillDate_Beverage: initHD_B,
+        totalHomeDeliveryTillDate_Beverage_None: initHD_B_None
+      },
+      () => this.calculateTotalCost()
+    );
+    //console.log("computeTotalNumberOfResidents", initR);
+  };
+  calculateTotalCost = () => {
+    //Home Delivery Total Beverages
+    let totalBevHD = this.state.totalHomeDeliveryTillDate_Beverage_None * 16.25;
+    //Food Home Delivery
+    let totalResHD = this.state.totalHomeDeliveryTillDate * 70;
+    //Bev Dining
+    let totalBevRes = this.state.totalResidentsTillDate_Beverage * 14.25;
+    //Food Dining
+    let totalFoodRes = this.state.totalResidentsTillDate * 14.25;
+
+    let totalSum = totalBevHD + totalResHD + totalBevRes + totalFoodRes;
+    this.setState({ totalSum });
   };
   handleTabChange = (e, v) => {
     this.setState({ tabValue: v });
@@ -543,6 +622,75 @@ class App extends React.Component {
             ))}
         </TabPanel>
         <TabPanel value={tabValue} index={2}>
+          <Paper className="paperPadding">
+            <div className="typoBg">
+              <Typography variant="subtitle2">
+                {this.state.min_date} - {this.state.max_date}
+              </Typography>
+              <Typography variant="subtitle2">
+                Total Cost = &#8377; {this.state.totalSum}
+              </Typography>
+            </div>
+            <Grid container spacing={1}>
+              <Grid item xs={4}>
+                <div className="centerDiv">
+                  <Typography className="typoGridClass" variant="body2">
+                    Resident
+                  </Typography>
+                  <div className="gridSummary">
+                    <div>
+                      <Typography variant="caption">Food</Typography>
+                      <p>{this.state.totalResidentsTillDate}</p>
+                    </div>
+                    <div>
+                      <Typography variant="caption">Beverage</Typography>
+                      <p>{this.state.totalResidentsTillDate_Beverage}</p>
+                    </div>
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={4}>
+                <div className="centerDiv">
+                  <Typography className="typoGridClass" variant="body2">
+                    Guest
+                  </Typography>
+                  <div className="gridSummary">
+                    <div>
+                      <Typography variant="caption">Food</Typography>
+                      <p>{this.state.totalGuestsTillDate}</p>
+                    </div>
+                    <div>
+                      <Typography variant="caption">Beverage</Typography>
+                      <p>{this.state.totalGuestsTillDate_Beverage}</p>
+                    </div>
+                  </div>
+                </div>
+              </Grid>
+              <Grid item xs={4}>
+                <div className="centerDiv">
+                  <Typography className="typoGridClass" variant="body2">
+                    Home Delivery
+                  </Typography>
+                  <div className="gridSummary">
+                    <div>
+                      <Typography variant="caption">Food</Typography>
+                      <p>{this.state.totalHomeDeliveryTillDate}</p>
+                    </div>
+                    <div>
+                      <Typography variant="caption">Beverage</Typography>
+                      <p>
+                        {this.state.totalHomeDeliveryTillDate_Beverage_None +
+                          this.state.totalResidentsTillDate_Beverage}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+            <Typography variant="caption">
+              Here You Can See Sum Of Each Category
+            </Typography>
+          </Paper>
           {Object.keys(this.state.logFilteredDate).length > 0 &&
             Object.keys(this.state.logFilteredDate).map((filtered, index) => (
               <ExpansionPanels
@@ -556,5 +704,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;

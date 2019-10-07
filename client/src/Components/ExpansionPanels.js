@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function SimpleExpansionPanel({ info, date }) {
   const classes = useStyles();
-  console.log("SimpleExpansionPanel", info[`${date} Beverage`]["category"]);
+  //console.log("SimpleExpansionPanel", date, info[`${date} Dinner`]);
   return (
     <div className={classes.root}>
       <ExpansionPanel>
@@ -124,7 +124,7 @@ export default function SimpleExpansionPanel({ info, date }) {
                     {info[`${date} Dinner`]["category"].g}
                   </Grid>
                   <Grid item xs={4}>
-                    {info[`${date} Lunch`]["category"].hd}
+                    {info[`${date} Dinner`]["category"].hd}
                   </Grid>
                 </Grid>
               </Grid>
