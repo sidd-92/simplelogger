@@ -1,2 +1,2 @@
-# simpleloggerbackend
-Simple Logger Backend
+# simplelogger
+Simple Logger
