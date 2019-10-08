@@ -179,12 +179,12 @@ class App extends React.Component {
   };
   computeTotalCategory = () => {
     let allLogs = this.state.addedLogs;
-    let initR = this.state.totalResidentsTillDate;
-    let initG = this.state.totalGuestsTillDate;
-    let initHD = this.state.totalHomeDeliveryTillDate;
-    let initR_B = this.state.totalResidentsTillDate_Beverage;
-    let initG_B = this.state.totalGuestsTillDate_Beverage;
-    let initHD_B = this.state.totalHomeDeliveryTillDate_Beverage;
+    let initR = 0;
+    let initG = 0;
+    let initHD = 0;
+    let initR_B = 0;
+    let initG_B = 0;
+    let initHD_B = 0;
     allLogs.map(log => {
       if (log.mealOption === "Food") {
         if (
@@ -192,14 +192,14 @@ class App extends React.Component {
           log.mealType === "Lunch" ||
           log.mealType === "Dinner"
         ) {
-          initR = log.category.r + initR;
+          initR = parseInt(log.category.r) + initR;
           initG = log.category.g + initG;
           initHD = log.category.hd + initHD;
         }
       }
       if (log.mealOption === "Beverage") {
-        initR_B = log.category.r + initR;
-        initG_B = log.category.g + initG;
+        initR_B = log.category.r + initR_B;
+        initG_B = log.category.g + initG_B;
         initHD_B = log.category.hd + initHD_B;
       }
     });
@@ -291,7 +291,10 @@ class App extends React.Component {
           openSnackBar: true,
           tabValue: 1
         },
-        this.resetFields()
+        () => {
+          this.resetFields();
+          this.computeTotalCategory();
+        }
       );
     } else {
       this.setState({
@@ -360,6 +363,7 @@ class App extends React.Component {
       // console.log(res);
       // console.log(res.data);
       this.getAllLogs();
+      this.computeTotalCategory();
     });
   };
   render() {
@@ -651,7 +655,7 @@ class App extends React.Component {
                     </div>
                     <div>
                       <Typography variant="caption">Beverage</Typography>
-                      <p>{this.state.totalResidentsTillDate_Beverage}</p>
+                      <p>{this.state.totalHomeDeliveryTillDate_Beverage}</p>
                     </div>
                   </div>
                 </div>
