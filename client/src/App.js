@@ -61,7 +61,6 @@ class App extends React.Component {
       totalResidentsTillDate_Beverage: 0,
       totalGuestsTillDate_Beverage: 0,
       totalHomeDeliveryTillDate_Beverage: 0,
-      totalHomeDeliveryTillDate_Beverage_None: 0,
       max_date: "",
       min_date: "",
       totalSum: 0
@@ -174,27 +173,6 @@ class App extends React.Component {
           category: item.category
         };
       }
-      if (item.mealType === "Breakfast" && item.mealOption === "Beverage") {
-        mealTypeObj[`${item.date} Beverage Breakfast`] = {
-          category: item.category,
-          option: "Beverage",
-          type: "Breakfast"
-        };
-      }
-      if (item.mealType === "Lunch" && item.mealOption === "Beverage") {
-        mealTypeObj[`${item.date} Beverage Lunch`] = {
-          category: item.category,
-          option: "Beverage",
-          type: "Lunch"
-        };
-      }
-      if (item.mealType === "Dinner" && item.mealOption === "Beverage") {
-        mealTypeObj[`${item.date} Beverage Dinner`] = {
-          category: item.category,
-          option: "Beverage",
-          type: "Dinner"
-        };
-      }
     });
     this.setState({ foodMealObj: mealTypeObj });
     //console.log(mealTypeObj);
@@ -207,7 +185,6 @@ class App extends React.Component {
     let initR_B = this.state.totalResidentsTillDate_Beverage;
     let initG_B = this.state.totalGuestsTillDate_Beverage;
     let initHD_B = this.state.totalHomeDeliveryTillDate_Beverage;
-    let initHD_B_None = this.state.totalHomeDeliveryTillDate_Beverage_None;
     allLogs.map(log => {
       if (log.mealOption === "Food") {
         if (
@@ -221,12 +198,9 @@ class App extends React.Component {
         }
       }
       if (log.mealOption === "Beverage") {
-        if (log.mealType !== "None") {
-          initR_B = log.category.r + initR;
-          initG_B = log.category.g + initG;
-          initHD_B = log.category.hd + initHD_B;
-        }
-        initHD_B_None = log.category.hd + initHD_B_None;
+        initR_B = log.category.r + initR;
+        initG_B = log.category.g + initG;
+        initHD_B = log.category.hd + initHD_B;
       }
     });
     //console.log("totalHomeDeliveryTillDate = ", initHD);
@@ -237,8 +211,7 @@ class App extends React.Component {
         totalHomeDeliveryTillDate: initHD,
         totalResidentsTillDate_Beverage: initR_B,
         totalGuestsTillDate_Beverage: initG_B,
-        totalHomeDeliveryTillDate_Beverage: initHD_B,
-        totalHomeDeliveryTillDate_Beverage_None: initHD_B_None
+        totalHomeDeliveryTillDate_Beverage: initHD_B
       },
       () => this.calculateTotalCost()
     );
@@ -246,7 +219,7 @@ class App extends React.Component {
   };
   calculateTotalCost = () => {
     //Home Delivery Total Beverages
-    let totalBevHD = this.state.totalHomeDeliveryTillDate_Beverage_None * 16.25;
+    let totalBevHD = this.state.totalHomeDeliveryTillDate_Beverage * 16.25;
     //Food Home Delivery
     let totalResHD = this.state.totalHomeDeliveryTillDate * 70;
     //Bev Dining
@@ -678,10 +651,7 @@ class App extends React.Component {
                     </div>
                     <div>
                       <Typography variant="caption">Beverage</Typography>
-                      <p>
-                        {this.state.totalHomeDeliveryTillDate_Beverage_None +
-                          this.state.totalResidentsTillDate_Beverage}
-                      </p>
+                      <p>{this.state.totalResidentsTillDate_Beverage}</p>
                     </div>
                   </div>
                 </div>
