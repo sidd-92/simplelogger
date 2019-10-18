@@ -63,7 +63,8 @@ class App extends React.Component {
       totalHomeDeliveryTillDate_Beverage: 0,
       max_date: "",
       min_date: "",
-      totalSum: 0
+      totalSum: 0,
+      comment: ""
     };
   }
   componentDidMount() {
@@ -80,6 +81,7 @@ class App extends React.Component {
         let newLog = {
           date: Moment(log.dateLogged).format("Do MMM YY"),
           mealType: log.mealType,
+          comment: log.comment,
           mealOption: log.isBeverage ? "Beverage" : "Food",
           category: {
             r: log.totalResident,
@@ -168,7 +170,10 @@ class App extends React.Component {
           type: "Snack"
         };
       }
-      if (item.mealType === "None" && item.mealOption === "Beverage") {
+      if (
+        item.mealType === "None" ||
+        (item.mealType === "Dinner" && item.mealOption === "Beverage")
+      ) {
         mealTypeObj[`${item.date} Beverage`] = {
           category: item.category
         };
@@ -254,21 +259,36 @@ class App extends React.Component {
     e.preventDefault();
     this.setState({ totalHomeDelivery: e.target.value });
   };
+  handleComment = e => {
+    e.preventDefault();
+    this.setState({ comment: e.target.value });
+  };
   addLog = e => {
     if (
-      this.state.totalResident > 0 ||
-      this.state.totalGuest > 0 ||
-      this.state.totalHomeDelivery > 0
+      this.state.totalResident === "" &&
+      this.state.totalGuest === "" &&
+      this.state.totalHomeDelivery === ""
+    ) {
+      this.setState({
+        errorMessage: "Please Enter a Value"
+      });
+      return;
+    }
+    if (
+      this.state.totalResident >= 0 ||
+      this.state.totalGuest >= 0 ||
+      this.state.totalHomeDelivery >= 0
     ) {
       let log = {
         date: Moment(this.state.selectedDate).format("Do MMM YY"),
         mealType: this.state.selectValue.mealType,
         mealOption: this.state.mealOption,
+        comment: this.state.comment,
         category: {
-          r: this.state.totalResident > 0 ? this.state.totalResident : 0,
-          g: this.state.totalGuest > 0 ? this.state.totalGuest : 0,
+          r: this.state.totalResident >= 0 ? this.state.totalResident : 0,
+          g: this.state.totalGuest >= 0 ? this.state.totalGuest : 0,
           hd:
-            this.state.totalHomeDelivery > 0 ? this.state.totalHomeDelivery : 0
+            this.state.totalHomeDelivery >= 0 ? this.state.totalHomeDelivery : 0
         }
       };
       let dbData = {
@@ -277,6 +297,7 @@ class App extends React.Component {
         totalGuest: log.category.g,
         totalHD: log.category.hd,
         mealType: log.mealType,
+        comment: log.comment,
         date: this.state.selectedDate
       };
       axios.post(`/api/logs`, dbData).then(res => {
@@ -292,6 +313,7 @@ class App extends React.Component {
           tabValue: 1
         },
         () => {
+          this.getAllLogs();
           this.resetFields();
           this.computeTotalCategory();
         }
@@ -310,7 +332,8 @@ class App extends React.Component {
       totalResident: "",
       totalGuest: "",
       totalHomeDelivery: "",
-      errorMessage: ""
+      errorMessage: "",
+      comment: ""
     });
   };
 
@@ -328,6 +351,7 @@ class App extends React.Component {
           let obj = {
             date: Moment(log.dateLogged).format("Do MMM YY"),
             mealType: log.mealType,
+            comment: log.comment,
             mealOption: log.isBeverage ? "Beverage" : "Food",
             category: {
               r: log.totalResident,
@@ -362,6 +386,7 @@ class App extends React.Component {
     axios.delete(`/api/logs/${value._id}`).then(res => {
       // console.log(res);
       // console.log(res.data);
+      alert("Log Was Deleted");
       this.getAllLogs();
       this.computeTotalCategory();
     });
@@ -572,6 +597,18 @@ class App extends React.Component {
                 />
               </Grid>
             </Grid>
+            <TextField
+              required
+              value={this.state.comment}
+              onChange={e => this.handleComment(e)}
+              type="text"
+              className="comment"
+              id="outlined-dense"
+              label="Enter Comment"
+              margin="dense"
+              variant="outlined"
+              fullWidth
+            />
           </Paper>
           <Button
             variant="contained"
@@ -583,7 +620,7 @@ class App extends React.Component {
           </Button>
           {this.state.errorMessage !== "" && (
             <Typography color="error" align="center">
-              Please Enter a Value greater than 0
+              Please Enter a Value
             </Typography>
           )}
         </TabPanel>

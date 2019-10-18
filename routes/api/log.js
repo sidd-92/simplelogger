@@ -45,6 +45,7 @@ router.get("/", (req, res, next) => {
             totalGuest: doc.totalGuest,
             totalHD: doc.totalHD,
             mealType: doc.mealType,
+            comment: doc.comment,
             dateLogged: doc.date,
             _id: doc._id
           };
@@ -73,6 +74,7 @@ router.post("/filterbydate", (req, res, next) => {
             totalGuest: doc.totalGuest,
             totalHD: doc.totalHD,
             mealType: doc.mealType,
+            comment: doc.comment,
             dateLogged: doc.date,
             _id: doc._id
           };
@@ -98,7 +100,8 @@ router.post("/", (req, res, next) => {
     isBeverage: req.body.isBeverage,
     totalResident: req.body.totalResident,
     totalGuest: req.body.totalGuest,
-    totalHD: req.body.totalHD
+    totalHD: req.body.totalHD,
+    comment: req.body.comment
   });
   newLog
     .save()
@@ -114,7 +117,8 @@ router.post("/", (req, res, next) => {
             isBeverage: req.body.isBeverage,
             totalResident: req.body.totalResident,
             totalGuest: req.body.totalGuest,
-            totalHD: req.body.totalHD
+            totalHD: req.body.totalHD,
+            comment: req.body.comment
           }
         });
       } else {

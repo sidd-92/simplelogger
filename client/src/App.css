@@ -67,7 +67,11 @@
   background-color: #1c3aa1 !important;
 }
 .textField {
-  margin: 0px;
+  margin: 0px !important;
+}
+.comment {
+  width: 98% !important;
+  height: 46px;
 }
 .badgeCount {
   padding: 0px 10px;

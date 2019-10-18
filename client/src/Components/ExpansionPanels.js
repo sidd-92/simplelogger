@@ -43,8 +43,8 @@ export default function SimpleExpansionPanel({ info, date }) {
         <ExpansionPanelDetails>
           <Paper className={classes.paperGrid}>
             <Grid container spacing={4}>
-              <Grid item xs={3}></Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}></Grid>
+              <Grid item xs={4}>
                 <Typography variant="subtitle2">Food</Typography> <br />
                 <Grid container>
                   <Grid item xs={4}>
@@ -58,7 +58,7 @@ export default function SimpleExpansionPanel({ info, date }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <Typography variant="subtitle2">Beverage</Typography> <br />
                 <Grid container>
                   <Grid item xs={4}>
@@ -88,12 +88,12 @@ export default function SimpleExpansionPanel({ info, date }) {
               </Grid> */}
             </Grid>
             <Grid container spacing={3}>
-              <Grid container direction="column" item xs={3}>
+              <Grid container direction="column" item xs={4}>
                 <Grid>Break/F</Grid>
                 <Grid>Lunch</Grid>
                 <Grid>Dinner</Grid>
               </Grid>
-              <Grid container direction="column" item xs={3}>
+              <Grid container direction="column" item xs={4}>
                 <Grid container>
                   <Grid item xs={4}>
                     {info[`${date} Breakfast`] &&
@@ -137,7 +137,7 @@ export default function SimpleExpansionPanel({ info, date }) {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid container direction="column" item xs={3}>
+              <Grid container direction="column" item xs={4}>
                 <Grid container>
                   <Grid item xs={4}>
                     {(info[`${date} Beverage`] &&

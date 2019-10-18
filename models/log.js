@@ -10,7 +10,8 @@ const logSchema = mongoose.Schema({
   isBeverage: { type: Boolean, default: false },
   totalResident: { type: Number, required: true, default: 0 },
   totalGuest: { type: Number, required: true, default: 0 },
-  totalHD: { type: Number, required: true, default: 0 }
+  totalHD: { type: Number, required: true, default: 0 },
+  comment: { type: String }
 });
 
 module.exports = mongoose.model("Log", logSchema);

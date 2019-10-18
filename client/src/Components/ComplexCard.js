@@ -16,6 +16,11 @@ const useStyles = makeStyles(theme => ({
   },
   deleteButton: {
     float: "right"
+  },
+  comment: {
+    position: "relative",
+    top: "-7px",
+    float: "right"
   }
 }));
 
@@ -60,6 +65,9 @@ export default function ComplexGrid({ log, deleteMode, deleteLog }) {
             </Grid>
           )}
         </Grid>
+        <Typography variant="caption" className={classes.comment}>
+          {log.comment}
+        </Typography>
       </Paper>
     </div>
   );
