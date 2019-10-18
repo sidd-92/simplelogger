@@ -313,7 +313,6 @@ class App extends React.Component {
           tabValue: 1
         },
         () => {
-          this.getAllLogs();
           this.resetFields();
           this.computeTotalCategory();
         }
